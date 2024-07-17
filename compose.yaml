@@ -42,7 +42,7 @@ services:
 
 
   spark-worker:
-    image: spark-image
+    image: spark-base
     entrypoint: ['./entrypoint.sh', 'worker']
     environment:
       - SPARK-WORKER-CORES=2
