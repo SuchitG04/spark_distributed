@@ -14,7 +14,8 @@ run:
 	make down && docker compose up
 
 run-scaled:
-	make down && docker compose up --scale spark-worker=3
+	# make down && docker compose up --scale spark-worker=3
+	docker compose up --scale spark-worker=3
 
 run-d:
 	make down && docker compose up -d
