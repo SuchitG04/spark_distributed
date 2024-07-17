@@ -1,7 +1,7 @@
 FROM cluster-base
 
 ARG jupyterlab_version=4.2.0
-ARG spark_version=3.3.3
+ARG spark_version=3.5.1
 
 RUN pip3 install wget pyspark==${spark_version} jupyterlab==${jupyterlab_version}
 

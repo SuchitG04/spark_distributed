@@ -3,8 +3,7 @@ FROM cluster-base
 ENV SPARK_HOME=${SPARK_HOME:-"/opt/spark"}
 ENV HADOOP_HOME=${HADOOP_HOME:-"/opt/hadoop"}
 
-ARG spark_version=3.3.3
-ARG hadoop_version=3.3.3
+ARG spark_version=3.5.1
 
 RUN mkdir -p ${HADOOP_HOME} && mkdir -p ${SPARK_HOME}
 
@@ -16,7 +15,6 @@ RUN curl https://archive.apache.org/dist/spark/spark-${spark_version}/spark-${sp
  && rm -rf spark-${spark_version}-bin-hadoop3.tgz
 
 ENV SPARK_VERSION=${spark_version}
-ENV HADOOP_VERSION=${hadoop_version}
 
 ENV PATH="/opt/spark/sbin:/opt/spark/bin:${PATH}"
 ENV SPARK_HOME="/opt/spark"
@@ -25,12 +23,12 @@ ENV SPARK_MASTER_HOST="spark-master"
 ENV SPARK_MASTER_PORT="7077"
 ENV PYSPARK_PYTHON="python3"
 
-COPY spark-defaults.conf "$SPARK_HOME/conf"
+COPY spark-defaults.conf ${SPARK_HOME}/conf
 
 RUN chmod u+x /opt/spark/sbin/* && \
     chmod u+x /opt/spark/bin/*
 
-ENV PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
+ENV PYTHONPATH=${SPARK_HOME}/python/:$PYTHONPATH
 
 COPY entrypoint.sh .
 

@@ -1,3 +1,8 @@
+# -- Env variables
+SPARK_VERSION="3.5.1"
+HADOOP_VERSION="3.5.1"
+
+#
 # -- Building the Images
 
 docker build \
