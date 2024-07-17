@@ -1,0 +1,55 @@
+volumes:
+  shared-workspace:
+    name: "distributed-filesystem"
+    driver: local
+
+services:
+  jupyterlab:
+    image: jupyterlab
+    volumes:
+      - shared-workspace:/opt/workspace
+    ports:
+      - 8888:8888
+
+  spark-master:
+    image: spark-base
+    entrypoint: ['./entrypoint.sh', 'master']
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - shared-workspace:/opt/workspace
+    env_file:
+      - .env.spark
+    ports:
+      - 9090:8080
+      - 7077:7077
+
+  spark-history-server:
+    image: spark-base
+    entrypoint: ['./entrypoint.sh', 'history']
+    depends_on:
+      - spark-master
+    volumes:
+      - shared-workspace:/opt/workspace
+      - shared-workspace:/opt/spark/spark-events
+    env_file:
+      - .env.spark
+    ports:
+      - 18080:18080
+
+
+  spark-worker:
+    image: spark-image
+    entrypoint: ['./entrypoint.sh', 'worker']
+    environment:
+      - SPARK-WORKER-CORES=2
+      - SPARK-WORKER-MEMORY=1024m
+    depends_on:
+      - spark-master
+    volumes:
+      - shared-workspace:/opt/workspace
+    env_file:
+      - .env.spark
