@@ -1,3 +1,5 @@
 pandas
 pyarrow
+warcio
+kaggle
 numpy==1.26.4
