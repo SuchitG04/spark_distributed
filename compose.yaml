@@ -22,7 +22,7 @@ services:
     volumes:
       - shared-workspace:/opt/workspace
     env_file:
-      - .env.spark
+      - spark.env
     ports:
       - 9090:8080
       - 7077:7077
@@ -36,7 +36,7 @@ services:
       - shared-workspace:/opt/workspace
       - shared-workspace:/opt/spark/spark-events
     env_file:
-      - .env.spark
+      - spark.env
     ports:
       - 18080:18080
 
@@ -44,12 +44,9 @@ services:
   spark-worker:
     image: spark-base
     entrypoint: ['./entrypoint.sh', 'worker']
-    environment:
-      - SPARK-WORKER-CORES=2
-      - SPARK-WORKER-MEMORY=1024m
     depends_on:
       - spark-master
     volumes:
       - shared-workspace:/opt/workspace
     env_file:
-      - .env.spark
+      - spark.env
